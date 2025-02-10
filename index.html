@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>加载中...</title>
+    <script src="lottie.min.js"></script>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 动画容器 */
+        #animation-container {
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 加载动画 -->
+    <div id="animation-container">
+        <div id="animation"></div>
+    </div>
+
+    <script>
+        var animation = lottie.loadAnimation({
+            path: 'data.json', // 你的动画 JSON 文件
+            loop: false,       // 仅播放一次
+            autoplay: true,
+            renderer: 'svg',
+            container: document.getElementById('animation'),
+            rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice',
+                clearCanvas: true,
+            }
+        });
+
+        // 监听动画播放完毕事件，跳转到主页面
+        animation.addEventListener('complete', function() {
+            window.location.href = 'home.html'; // 跳转到主页面
+        });
+    </script>
+
+</body>
+</html>
