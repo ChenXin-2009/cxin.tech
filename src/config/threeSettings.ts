@@ -9,11 +9,14 @@ export interface ThreeSettings {
   tetraRadius: number
   tetraOffsetX: number
   cameraDistance: number
+  cameraFov: number
 
   // 旋转与交互
   rotationSpeedY: number
   rotationSpeedX: number
   dragSensitivity: number
+  dragInertia: number
+  dragDamping: number
 
   // 光照
   ambientLightIntensity: number
@@ -38,6 +41,7 @@ export interface ThreeSettings {
   asciiGridSize: number
   asciiChars: string
   asciiColor: string
+  asciiCharAspect: number
 
   // 材质
   materialType: MaterialType
@@ -57,14 +61,17 @@ export interface ThreeSettings {
 
 const threeSettings: ThreeSettings = {
   // 模型与相机
-  tetraRadius: 4.0,           // 正四面体半径，值越大模型越大
-  tetraOffsetX: -5,         // X轴偏移，负值向左，正值向右
+  tetraRadius: 2.0,           // 正四面体半径，值越大模型越大
+  tetraOffsetX: -5,           // X轴偏移，负值向左，正值向右
   cameraDistance: 10,         // 摄像机距离，越大模型显得越小
+  cameraFov: 45,              // 视场角（度），越大视野越广，透视变形越强
 
   // 旋转与交互
   rotationSpeedY: 0.25,       // Y轴自动旋转速度（弧度/秒）
   rotationSpeedX: 0.08,       // X轴自动旋转速度（弧度/秒）
   dragSensitivity: 0.012,     // 拖拽灵敏度，值越大越灵敏
+  dragInertia: 0.92,          // 惯性系数，0-1，越大惯性越强
+  dragDamping: 0.95,          // 阻尼系数，0-1，越大减速越慢
 
   // 光照
   ambientLightIntensity: 1.1,           // 环境光强度
@@ -87,8 +94,9 @@ const threeSettings: ThreeSettings = {
   // ASCII 艺术效果（用字符构成图形）
   asciiEnabled: true,        // 是否启用ASCII效果
   asciiGridSize: 10,         // 字符大小，值越小越密集越清晰
-  asciiChars: 'CIXN',        // 用于显示的字符，按亮度从暗到亮排列
-  asciiColor: '#ffffff',     // ASCII字符颜色（十六进制）
+  asciiChars: '.ITCXEHN',    // 用于显示的字符，按亮度从暗到亮排列
+  asciiColor: '#000000',   // ASCII字符颜色（十六进制）
+  asciiCharAspect: 0.6,      // 字符宽高比，monospace通常0.5-0.6
 
   // 材质
   materialType: 'standard',  // 材质类型：'standard'受光照影响，'basic'不受光照

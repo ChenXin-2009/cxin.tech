@@ -16,7 +16,7 @@ export default function ThreeScene() {
     // 创建离屏 Three.js 渲染器
     const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true })
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000)
+    const camera = new THREE.PerspectiveCamera(threeSettings.cameraFov || 75, 1, 0.1, 1000)
     camera.position.z = threeSettings.cameraDistance
 
     // 光照
@@ -103,23 +103,39 @@ export default function ThreeScene() {
     tetra.position.x = threeSettings.tetraOffsetX
     scene.add(tetra)
 
-    // 拖拽状态
+    // 拖拽状态和惯性
     let isDragging = false
-    let startX = 0, startY = 0, startRx = 0, startRy = 0
+    let targetRotationX = 0
+    let targetRotationY = 0
+    let velocityX = 0
+    let velocityY = 0
 
     const onMouseDown = (e: MouseEvent) => {
       isDragging = true
-      startX = e.clientX
-      startY = e.clientY
-      startRx = tetra.rotation.x
-      startRy = tetra.rotation.y
+      targetRotationX = tetra.rotation.x
+      targetRotationY = tetra.rotation.y
       document.body.style.cursor = 'grabbing'
     }
 
+    let lastMouseX = 0
+    let lastMouseY = 0
+    
     const onMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return
-      tetra.rotation.y = startRy + (e.clientX - startX) * threeSettings.dragSensitivity
-      tetra.rotation.x = startRx + (e.clientY - startY) * threeSettings.dragSensitivity
+      if (!isDragging) {
+        lastMouseX = e.clientX
+        lastMouseY = e.clientY
+        return
+      }
+      
+      // 计算鼠标移动的增量
+      const deltaX = (e.clientX - lastMouseX) * threeSettings.dragSensitivity
+      const deltaY = (e.clientY - lastMouseY) * threeSettings.dragSensitivity
+      lastMouseX = e.clientX
+      lastMouseY = e.clientY
+      
+      // 更新目标旋转
+      targetRotationY += deltaX
+      targetRotationX += deltaY
     }
 
     const onMouseUp = () => {
@@ -133,20 +149,22 @@ export default function ThreeScene() {
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp)
 
-    // 字符宽高比约为 0.6，需要补偿
-    const charAspect = 0.6
+    // 字符宽高比
+    const charAspect = threeSettings.asciiCharAspect || 0.5
 
     const resize = () => {
       const w = window.innerWidth
       const h = window.innerHeight
       
-      // 考虑字符宽高比来计算正确的渲染尺寸
-      const cols = Math.floor(w / (threeSettings.asciiGridSize * charAspect))
-      const rows = Math.floor(h / threeSettings.asciiGridSize)
-      
-      // 相机宽高比需要匹配实际显示比例
-      camera.aspect = (cols * charAspect) / rows
+      // 相机宽高比 = 屏幕宽高比
+      camera.aspect = w / h
       camera.updateProjectionMatrix()
+      
+      // 计算字符网格大小，保持和屏幕相同的宽高比
+      const gridSize = threeSettings.asciiGridSize
+      const rows = Math.floor(h / gridSize)
+      // cols 需要补偿字符宽高比，使渲染结果在字符显示后保持正确比例
+      const cols = Math.floor((w / h) * rows / charAspect)
       
       renderer.setSize(cols, rows)
     }
@@ -154,13 +172,32 @@ export default function ThreeScene() {
     window.addEventListener('resize', resize)
 
     const asciiChars = threeSettings.asciiChars || 'CXIN'
+    const damping = threeSettings.dragDamping || 0.95
+    const inertia = threeSettings.dragInertia || 0.92
 
     const animate = () => {
       animationId = requestAnimationFrame(animate)
 
-      if (!isDragging) {
-        tetra.rotation.y += threeSettings.rotationSpeedY * 0.016
-        tetra.rotation.x += threeSettings.rotationSpeedX * 0.016
+      if (isDragging) {
+        // 拖动时：平滑跟随目标位置
+        velocityX = (targetRotationX - tetra.rotation.x) * (1 - inertia)
+        velocityY = (targetRotationY - tetra.rotation.y) * (1 - inertia)
+        tetra.rotation.x += velocityX
+        tetra.rotation.y += velocityY
+      } else {
+        // 松开后：应用惯性
+        if (Math.abs(velocityX) > 0.0001 || Math.abs(velocityY) > 0.0001) {
+          tetra.rotation.x += velocityX
+          tetra.rotation.y += velocityY
+          velocityX *= damping
+          velocityY *= damping
+        } else {
+          // 惯性结束后恢复自动旋转
+          tetra.rotation.y += threeSettings.rotationSpeedY * 0.016
+          tetra.rotation.x += threeSettings.rotationSpeedX * 0.016
+          targetRotationX = tetra.rotation.x
+          targetRotationY = tetra.rotation.y
+        }
       }
 
       // 渲染 3D 场景
@@ -218,8 +255,8 @@ export default function ThreeScene() {
   return (
     <div 
       ref={containerRef}
-      className="fixed inset-0 z-0 overflow-hidden pointer-events-auto" 
-      style={{ backgroundColor: '#000', cursor: 'grab' }}
+      className="fixed inset-0 z-0 overflow-hidden pointer-events-auto select-none" 
+      style={{ backgroundColor: '#f5f2ebff', cursor: 'grab' }}
     >
       <pre
         ref={asciiRef}
@@ -233,6 +270,7 @@ export default function ThreeScene() {
           whiteSpace: 'pre',
           letterSpacing: '0px',
           pointerEvents: 'none',
+          userSelect: 'none',
         }}
       />
     </div>

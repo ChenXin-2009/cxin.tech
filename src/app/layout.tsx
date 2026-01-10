@@ -13,7 +13,30 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body style={{ backgroundColor: '#000', color: '#fff' }}>{children}</body>
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/Novecento-Wide-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Frutiger55Roman.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Frutiger Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body style={{ backgroundColor: '#e6e4e0', color: '#000' }}>{children}</body>
     </html>
   )
 }
