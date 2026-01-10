@@ -110,7 +110,7 @@ export default function ThreeScene() {
     let velocityX = 0
     let velocityY = 0
 
-    const onMouseDown = (e: MouseEvent) => {
+    const onMouseDown = () => {
       isDragging = true
       targetRotationX = tetra.rotation.x
       targetRotationY = tetra.rotation.y
