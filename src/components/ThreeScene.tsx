@@ -128,7 +128,8 @@ export default function ThreeScene() {
     }
 
     // 绑定到容器而不是隐藏的canvas
-    containerRef.current.addEventListener('mousedown', onMouseDown)
+    const container = containerRef.current
+    container.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp)
 
@@ -201,7 +202,7 @@ export default function ThreeScene() {
 
     return () => {
       cancelAnimationFrame(animationId)
-      containerRef.current?.removeEventListener('mousedown', onMouseDown)
+      container.removeEventListener('mousedown', onMouseDown)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
       window.removeEventListener('resize', resize)
