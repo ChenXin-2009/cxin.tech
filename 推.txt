@@ -14,3 +14,8 @@ git pull origin main
 git tag v0.1.0
 git push origin main
 git push origin v0.1.0
+
+====
+git add .
+git commit -m "fix: next.config.ts type error"
+git push origin main
