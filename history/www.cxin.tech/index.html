@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>加载中...</title>
+    <script src="assets/lottie.min.js"></script>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 动画容器 */
+        #animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Lottie 动画 */
+        #animation {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 加载动画 -->
+    <div id="animation-container">
+        <div id="animation"></div>
+    </div>
+
+    <script>
+        let animation;
+
+        // 选择适合当前屏幕的动画 JSON
+        function getAnimationFile() {
+            return window.innerWidth > window.innerHeight ? 'assets/data.json' : 'assets/phone_data.json';
+        }
+
+        // 加载动画
+        function loadAnimation() {
+            // 清除旧动画
+            if (animation) {
+                animation.destroy();
+            }
+
+            animation = lottie.loadAnimation({
+                path: getAnimationFile(),  // 选择动画文件
+                loop: false,               // 仅播放一次
+                autoplay: true,
+                renderer: 'svg',
+                container: document.getElementById('animation'),
+                rendererSettings: {
+                    preserveAspectRatio: 'xMidYMid slice',  // 等比例放大，裁剪溢出部分
+                    clearCanvas: true,
+                }
+            });
+
+            // 监听动画播放完毕，跳转到主页面
+            animation.addEventListener('complete', function () {
+                window.location.href = 'home.html';
+            });
+        }
+
+        // 监听屏幕方向变化
+        window.addEventListener('resize', loadAnimation);
+        window.addEventListener('orientationchange', loadAnimation);
+
+        // 初次加载动画
+        loadAnimation();
+    </script>
+</body>
+
+</html>
