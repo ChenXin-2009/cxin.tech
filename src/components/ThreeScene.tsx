@@ -7,8 +7,19 @@ import threeSettings from '@/config/threeSettings'
 export default function ThreeScene() {
   const asciiRef = useRef<HTMLPreElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = React.useState(false)
+  const [scrollY, setScrollY] = React.useState(0)
 
   useEffect(() => {
+    // 延迟一点让装饰线条先出现
+    setTimeout(() => setMounted(true), 100)
+    
+    // 监听滚动
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+    window.addEventListener('scroll', handleScroll)
+    
     if (!containerRef.current || !asciiRef.current) return
     
     let animationId: number
@@ -256,6 +267,7 @@ export default function ThreeScene() {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
       window.removeEventListener('resize', resize)
+      window.removeEventListener('scroll', handleScroll)
       renderer.dispose()
       geometry.dispose()
       materials.forEach(m => m.dispose())
@@ -269,10 +281,16 @@ export default function ThreeScene() {
     <div 
       ref={containerRef}
       className="fixed inset-0 z-0 overflow-hidden pointer-events-auto select-none transition-colors" 
-      style={{ backgroundColor: 'var(--bg-canvas)', cursor: 'grab' }}
+      style={{ 
+        backgroundColor: 'var(--bg-canvas)', 
+        cursor: 'grab',
+        transform: `translateY(-${scrollY}px)`,
+        transition: 'transform 0.1s linear'
+      }}
     >
       <pre
         ref={asciiRef}
+        className={`transition-all duration-700 ${mounted ? 'opacity-15 md:opacity-25 scale-100' : 'opacity-0 scale-95'}`}
         style={{
           margin: 0,
           padding: 0,
@@ -280,11 +298,11 @@ export default function ThreeScene() {
           lineHeight: `${threeSettings.asciiGridSize}px`,
           fontFamily: 'monospace',
           color: 'var(--text-primary)',
-          opacity: 0.15,
           whiteSpace: 'pre',
           letterSpacing: '0px',
           pointerEvents: 'none',
           userSelect: 'none',
+          willChange: 'transform, opacity',
         }}
       />
     </div>
