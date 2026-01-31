@@ -35,8 +35,20 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const stored = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = stored || (systemPrefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+              })();
+            `,
+          }}
+        />
       </head>
-      <body style={{ backgroundColor: '#e6e4e0', color: '#000' }}>{children}</body>
+      <body style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>{children}</body>
     </html>
   )
 }

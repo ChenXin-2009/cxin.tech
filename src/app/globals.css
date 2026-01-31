@@ -29,9 +29,22 @@
 :root {
   --color-primary: #000;
   --color-secondary: #666;
+  --bg-primary: #e6e4e0;
+  --bg-canvas: #e6e4e0;
+  --text-primary: #000;
+  --border-color: rgba(0, 0, 0, 0.2);
   --font-title: 'Novecento', sans-serif;
   --font-sans: 'Frutiger', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+}
+
+[data-theme="dark"] {
+  --color-primary: #fff;
+  --color-secondary: #999;
+  --bg-primary: #1a1a1a;
+  --bg-canvas: #1a1a1a;
+  --text-primary: #fff;
+  --border-color: rgba(255, 255, 255, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -42,11 +55,36 @@
 }
 
 body {
-  background-color: #e6e4e0;
-  color: #000;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   font-variant-numeric: lining-nums;
   transition: background-color 0.3s, color 0.3s;
+  letter-spacing: 0.02em;
+}
+
+/* 明日方舟风格选择效果 */
+::selection {
+  background-color: #ff6b35;
+  color: #fff;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -100,7 +100,17 @@ export default function ThreeScene() {
     }))
 
     const tetra = new THREE.Mesh(geometry, materials)
-    tetra.position.x = threeSettings.tetraOffsetX
+    
+    // 响应式定位：移动端居中，桌面端偏左
+    const updateTetraPosition = () => {
+      if (window.innerWidth < 768) {
+        tetra.position.x = 0 // 移动端居中
+      } else {
+        tetra.position.x = threeSettings.tetraOffsetX // 桌面端使用配置值
+      }
+    }
+    updateTetraPosition()
+    
     scene.add(tetra)
 
     // 拖拽状态和惯性
@@ -167,6 +177,9 @@ export default function ThreeScene() {
       const cols = Math.floor((w / h) * rows / charAspect)
       
       renderer.setSize(cols, rows)
+      
+      // 更新四面体位置
+      updateTetraPosition()
     }
     resize()
     window.addEventListener('resize', resize)
@@ -255,8 +268,8 @@ export default function ThreeScene() {
   return (
     <div 
       ref={containerRef}
-      className="fixed inset-0 z-0 overflow-hidden pointer-events-auto select-none" 
-      style={{ backgroundColor: '#f5f2ebff', cursor: 'grab' }}
+      className="fixed inset-0 z-0 overflow-hidden pointer-events-auto select-none transition-colors" 
+      style={{ backgroundColor: 'var(--bg-canvas)', cursor: 'grab' }}
     >
       <pre
         ref={asciiRef}
@@ -266,7 +279,8 @@ export default function ThreeScene() {
           fontSize: `${fontSize}px`,
           lineHeight: `${threeSettings.asciiGridSize}px`,
           fontFamily: 'monospace',
-          color: threeSettings.asciiColor || '#00ff00',
+          color: 'var(--text-primary)',
+          opacity: 0.15,
           whiteSpace: 'pre',
           letterSpacing: '0px',
           pointerEvents: 'none',

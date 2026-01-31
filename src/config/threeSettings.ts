@@ -87,7 +87,7 @@ const threeSettings: ThreeSettings = {
   // 四面体每个面的设置
   faceLetters: ['C', 'X', 'I', 'N'],              // 四个面上的字母
   faceColors: ['#ffffff', '#ffffff', '#ffffff', '#ffffff'], // 四个面的颜色
-  faceLetterScale: 0.6,                           // 字母大小比例，0.1-1.0
+  faceLetterScale: 0.4,                           // 字母大小比例，0.1-1.0
   faceLetterScaleX: 1.2,                          // 字母水平拉伸，>1变宽，<1变窄
   faceLetterScaleY: 0.7,                          // 字母垂直拉伸，>1变高，<1变矮
 
