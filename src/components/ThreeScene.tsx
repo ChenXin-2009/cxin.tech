@@ -108,6 +108,8 @@ export default function ThreeScene() {
       map: tex,
       metalness: threeSettings.metalness,
       roughness: threeSettings.roughness,
+      transparent: threeSettings.tetraOpacity < 1.0,
+      opacity: threeSettings.tetraOpacity,
     }))
 
     const tetra = new THREE.Mesh(geometry, materials)

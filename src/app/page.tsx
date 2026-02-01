@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import ThreeScene from '@/components/ThreeScene'
 import ThemeToggle from '@/components/ThemeToggle'
+import threeSettings from '@/config/threeSettings'
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -56,6 +57,39 @@ export default function Home() {
     <main className="min-h-screen relative overflow-hidden">
       {/* Fullscreen canvas lives in ThreeScene (fixed) */}
       <ThreeScene />
+
+      {/* Logo 背景 */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0 flex items-center justify-start overflow-hidden"
+        style={{ paddingLeft: threeSettings.logoOffsetX }}
+      >
+        {/* 亮色模式：显示黑色 logo */}
+        <img 
+          src="/svg/CXinLOGO/CX2.svg" 
+          alt="" 
+          className="object-contain transition-all duration-300 invert"
+          style={{ 
+            transform: `rotate(${threeSettings.logoRotation}deg)`,
+            opacity: threeSettings.logoOpacity,
+            width: threeSettings.logoSize,
+            height: threeSettings.logoSize,
+          }}
+          data-theme-light="true"
+        />
+        {/* 暗色模式：显示白色 logo */}
+        <img 
+          src="/svg/CXinLOGO/CX2.svg" 
+          alt="" 
+          className="hidden object-contain transition-all duration-300"
+          style={{ 
+            transform: `rotate(${threeSettings.logoRotation}deg)`,
+            opacity: threeSettings.logoOpacity,
+            width: threeSettings.logoSize,
+            height: threeSettings.logoSize,
+          }}
+          data-theme-dark="true"
+        />
+      </div>
 
       {/* 主题切换按钮 */}
       <ThemeToggle />
@@ -193,11 +227,9 @@ export default function Home() {
           {/* 项目卡片列表 */}
           <div className="space-y-6">
             {/* Solmap 项目卡片 */}
-            <a
-              href="https://solmap.cxin.tech"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`group relative border-2 p-0 transition-all duration-700 delay-100 hover:border-orange-500 flex flex-col md:flex-row overflow-hidden ${projectsVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            <div
+              onClick={() => window.open('https://solmap.cxin.tech', '_blank')}
+              className={`group relative border-2 p-0 transition-all duration-700 delay-100 hover:border-orange-500 flex flex-col md:flex-row overflow-hidden cursor-pointer ${projectsVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
               style={{ borderColor: 'var(--border-color)' }}
             >
               {/* 卡片装饰 */}
@@ -257,7 +289,7 @@ export default function Home() {
 
               {/* 悬停效果背景 */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none" style={{ backgroundColor: 'var(--text-primary)' }}></div>
-            </a>
+            </div>
           </div>
         </div>
       </div>

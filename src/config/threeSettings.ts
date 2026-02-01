@@ -43,12 +43,19 @@ export interface ThreeSettings {
   asciiColor: string
   asciiCharAspect: number
 
+  // Logo 背景
+  logoSize: string
+  logoOffsetX: string
+  logoRotation: number
+  logoOpacity: number
+
   // 材质
   materialType: MaterialType
   metalness: number
   roughness: number
   emissive: number
   emissiveColor: number
+  tetraOpacity: number
 
   // 画布 / 调试
   backgroundColorHex: number
@@ -61,8 +68,8 @@ export interface ThreeSettings {
 
 const threeSettings: ThreeSettings = {
   // 模型与相机
-  tetraRadius: 2.0,           // 正四面体半径，值越大模型越大
-  tetraOffsetX: -5,           // X轴偏移，负值向左，正值向右
+  tetraRadius: 3.0,           // 正四面体半径，值越大模型越大
+  tetraOffsetX: -3,           // X轴偏移，负值向左，正值向右
   cameraDistance: 10,         // 摄像机距离，越大模型显得越小
   cameraFov: 45,              // 视场角（度），越大视野越广，透视变形越强
 
@@ -98,12 +105,19 @@ const threeSettings: ThreeSettings = {
   asciiColor: '#000000',   // ASCII字符颜色（十六进制）
   asciiCharAspect: 0.6,      // 字符宽高比，monospace通常0.5-0.6
 
+  // Logo 背景
+  logoSize: '100vh',         // Logo 大小
+  logoOffsetX: '10vw',       // Logo 左侧偏移量
+  logoRotation: -25,         // Logo 旋转角度（负数为逆时针）
+  logoOpacity: 0.1,         // Logo 透明度
+
   // 材质
   materialType: 'standard',  // 材质类型：'standard'受光照影响，'basic'不受光照
   metalness: 0.0,            // 金属度 0-1，仅standard有效
   roughness: 1,            // 粗糙度 0-1，仅standard有效
   emissive: 0.0,             // 自发光强度
   emissiveColor: 0x000000,   // 自发光颜色（十六进制）
+  tetraOpacity: 1.0,         // 四棱锥透明度 0-1，1为完全不透明
 
   // 画布 / 调试
   backgroundColorHex: 0x000000,       // 背景色（十六进制）

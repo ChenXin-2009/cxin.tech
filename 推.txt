@@ -8,14 +8,14 @@
 ==================
 git status
 git add .
-git commit -m "Release 0.3.0: 更新页面设计"
+git commit -m "Release 0.3.1: 更新页面设计"
 git checkout main
 git pull origin main
-git tag v0.3.0
+git tag v0.3.1
 git push origin maingit add .
-git commit -m "Release 0.3.0: 更新页面设计"
+git commit -m "Release 0.3.1: 更新页面设计"
 git push origin main
-git push origin v0.3.0
+git push origin v0.3.1
 
 ====
 git add .

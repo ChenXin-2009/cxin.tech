@@ -87,6 +87,23 @@ body {
   background: var(--color-secondary);
 }
 
+/* Logo 主题切换 */
+[data-theme="light"] [data-theme-dark="true"] {
+  display: none;
+}
+
+[data-theme="light"] [data-theme-light="true"] {
+  display: block;
+}
+
+[data-theme="dark"] [data-theme-light="true"] {
+  display: none;
+}
+
+[data-theme="dark"] [data-theme-dark="true"] {
+  display: block;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: #fff;
